@@ -6,8 +6,64 @@
     <title>Stackly | Login</title>
     <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- EXACT FIX FOR THE EYE ICON --- */
+       /* --- THE ULTIMATE OVERLAY FIX --- */
+/* --- CSS FIX FOR ICON ALIGNMENT --- */
+.input-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    display: block !important; /* Forces input and icons to layer */
+}
 
+.input-wrapper input {
+    width: 100% !important;
+    padding-left: 45px !important;  /* Space for Lock Icon */
+    padding-right: 45px !important; /* Space for Eye Icon */
+    box-sizing: border-box !important;
+}
+
+/* Lock Icon (Left Side) */
+.input-wrapper i.fa-lock {
+    position: absolute !important;
+    left: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #94a3b8;
+    z-index: 10;
+}
+
+/* Eye Icon (Right Side Corner) */
+#togglePassword {
+    position: absolute !important;
+    right: 15px !important; /* Forces it to the right corner */
+    left: auto !important;  /* Prevents it from sticking to the left */
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #94a3b8;
+    cursor: pointer !important;
+    z-index: 10;
+}
+
+#togglePassword:hover {
+    color: #0ea5e9;
+}
+
+/* Remember Me Styles */
+.remember-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.remember-group input {
+    width: 16px;
+    height: 16px;
+    accent-color: #0ea5e9;
+}
+    </style>
 </head>
 <body>
 
@@ -17,10 +73,10 @@
                 <div class="card-left">
                     <header class="card-header">
                         <div class="logo">
-        <a href="index.html">
-            <img src="assets/logo.webp" alt="Logo">
-        </a>
-    </div>
+                            <a href="index.html">
+                                <img src="assets/logo.webp" alt="Logo">
+                            </a>
+                        </div>
                         <nav class="header-nav">
                             <a href="index.html" class="home-link">Back To Home</a>
                         </nav>
@@ -39,8 +95,8 @@
                             <div class="field-group" id="nameField" style="display: none;">
                                 <label>Full Name</label>
                                 <div class="input-wrapper">
-                                    <i class="fa-regular fa-user"></i>
-                                    <input type="text" id="fullname" placeholder="Enter your name">
+                                    <i class="fa-regular fa-user" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                                    <input type="text" id="fullname" placeholder="Enter your name" style="padding-left: 45px;">
                                 </div>
                             </div>
 
@@ -51,7 +107,6 @@
                                         <option value="" disabled selected>Choose Authority</option>
                                         <option value="admin">Administrator</option>
                                         <option value="patient">Patient</option>
-                                       
                                     </select>
                                 </div>
                             </div>
@@ -59,22 +114,28 @@
                             <div class="field-group">
                                 <label>Lab Email</label>
                                 <div class="input-wrapper">
-                                    <i class="fa-regular fa-envelope"></i>
-                                    <input type="email" id="email" placeholder="name@bionova.lab" required>
+                                    <i class="fa-regular fa-envelope" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                                    <input type="email" id="email" placeholder="name@bionova.lab" required style="padding-left: 45px;">
                                 </div>
                             </div>
 
                             <div class="field-group">
                                 <label>Passkey</label>
                                 <div class="input-wrapper">
-                                    <i class="fa-solid fa-lock"></i>
-                                    <input type="password" id="password" placeholder="••••••••" required>
+                                    <i class="fa-solid fa-lock" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                                    <input type="password" id="password" placeholder="••••••••" required style="padding-left: 45px;">
+                                    <i class="fa-regular fa-eye-slash" id="togglePassword"></i>
                                 </div>
+                            </div>
+
+                            <div class="remember-group">
+                                <input type="checkbox" id="rememberMe">
+                                <label for="rememberMe">Remember me</label>
                             </div>
 
                             <div class="form-actions">
                                 <button type="button" class="alt-btn" onclick="window.location.href='404.html'">Forgot?</button>
-                                <button type="submit" class="prime-btn" id="submitBtn" >
+                                <button type="submit" class="prime-btn" id="submitBtn">
                                     <span>Login Account</span>
                                 </button>
                             </div>
@@ -100,6 +161,8 @@
         const submitBtn = document.getElementById('submitBtn');
         const toggleMsg = document.getElementById('toggleMsg');
         const authForm = document.getElementById('authForm');
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
 
         let isLogin = true;
 
@@ -121,31 +184,37 @@
             }
         });
 
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
         authForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const role = document.getElementById('userRole').value;
-            // Logic to redirect based on the selected authority
-           login();
+            login();
         });
+
         function login() {
-    const name = document.getElementById("fullname")?.value || "User";
-    const email = document.getElementById("email").value;
-    const role = document.getElementById("userRole").value;
+            const name = document.getElementById("fullname")?.value || "User";
+            const email = document.getElementById("email").value;
+            const role = document.getElementById("userRole").value;
+            const rememberMe = document.getElementById("rememberMe").checked;
 
-    // Store values
-    localStorage.setItem("userName", name);
-    localStorage.setItem("userEmail", email);
-    localStorage.setItem("userRole", role);
+            localStorage.setItem("userName", name);
+            localStorage.setItem("userEmail", email);
+            localStorage.setItem("userRole", role);
+            localStorage.setItem("rememberMe", rememberMe);
 
-    // Redirect based on role
-    if (role === "admin") {
-        window.location.href = "admin-dashboard.html";
-    } else if (role === "patient") {
-        window.location.href = "user-dashboard.html";
-    } else {
-        alert("Please select a role");
-    }
-}
+            if (role === "admin") {
+                window.location.href = "admin-dashboard.html";
+            } else if (role === "patient") {
+                window.location.href = "user-dashboard.html";
+            } else {
+                alert("Please select a role");
+            }
+        }
     </script>
 </body>
 </html>

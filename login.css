@@ -45,10 +45,10 @@ html, body {
 }
 
 .card-left {
-    padding: clamp(20px, 4vw, 50px);
+    padding: clamp(10px,2vw, 30px);
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Scroll internally if content is too tall for a small desktop */
+    overflow-y: hidden; /* Scroll internally if content is too tall for a small desktop */
 }
 
 /* Header */
